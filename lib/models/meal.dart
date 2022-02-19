@@ -1,6 +1,6 @@
-enum Complexity { Simple, Challenging, Hard }
+enum Complexity { simple, challenging, hard }
 
-enum Affordability { Affordable, Pricey, Luxurious }
+enum Affordability { affordable, pricey, luxurious }
 
 class Meal {
   final String id;
