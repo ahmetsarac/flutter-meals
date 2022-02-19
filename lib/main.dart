@@ -2,19 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:meals/categories_screen.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  MyApp({Key? key}) : super(key: key);
+
+  final ThemeData theme = ThemeData(
+    primarySwatch: Colors.pink,
+    canvasColor: const Color.fromRGBO(255, 254, 229, 1),
+    fontFamily: 'Raleway',
+  );
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Meals',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: theme.copyWith(
+          colorScheme: theme.colorScheme.copyWith(
+        secondary: Colors.amber,
+      )),
       home: const CategoriesScreen(),
     );
   }
