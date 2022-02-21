@@ -1,15 +1,52 @@
 import 'package:flutter/material.dart';
+import 'package:meals/dummy_data.dart';
 import 'package:meals/screens/filters_screen.dart';
 import 'package:meals/screens/meal_detail_screen.dart';
 import 'package:meals/screens/tabs_screen.dart';
+import 'models/meal.dart';
 import 'screens/category_meals_screen.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  MyApp({Key? key}) : super(key: key);
+class MyApp extends StatefulWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  Map<String, bool> _filters = {
+    'gluten': false,
+    'lactose': false,
+    'vegan': false,
+    'vegetarian': false,
+  };
+
+  List<Meal> _availableMeals = dummyMeals;
+
+  void _setFilters(Map<String, bool> filterData) {
+    setState(() {
+      _filters = filterData;
+      _availableMeals = dummyMeals.where((meal) {
+        if (_filters['gluten']! && !meal.isGlutenFree) {
+          return false;
+        }
+        if (_filters['lactose']! && !meal.isLactoseFree) {
+          return false;
+        }
+        if (_filters['vegan']! && !meal.isVegan) {
+          return false;
+        }
+        if (_filters['vegetarian']! && !meal.isVegetarian) {
+          return false;
+        }
+        return true;
+      }).toList();
+    });
+  }
 
   final ThemeData theme = ThemeData(
     primarySwatch: Colors.pink,
@@ -28,9 +65,12 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => const TabsScreen(),
-        CategoryMealsScreen.routeName: (context) => const CategoryMealsScreen(),
+        CategoryMealsScreen.routeName: (context) => CategoryMealsScreen(
+              availableMeals: _availableMeals,
+            ),
         MealDetailScreen.routeName: (context) => const MealDetailScreen(),
-        FiltersScreen.routeName: (context) => const FiltersScreen(),
+        FiltersScreen.routeName: (context) =>
+            FiltersScreen(filters: _filters, setFilters: _setFilters),
       },
     );
   }
